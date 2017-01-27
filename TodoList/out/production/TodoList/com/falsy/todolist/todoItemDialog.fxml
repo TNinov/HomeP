@@ -7,7 +7,7 @@
 <DialogPane fx:controller="com.falsy.todolist.DialogController"
             xmlns:fx="http://javafx.com/fxml">
     <headerText>
-        we could put instructions here
+        Create your new task:
     </headerText>
     <content>
         <GridPane vgap="10" hgap="10">

@@ -1,0 +1,22 @@
+.tooltip{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+.VBox{
+    -fx-background-color: white;
+}
+#label_date{
+    -fx-background-color: white;
+}
+#button_new{
+    -fx-graphic: url("img/new.png");
+}
+#toggle_today{
+    -fx-graphic: url("img/today.png");
+}
+#button_delete{
+    -fx-graphic: url("img/delete.png");
+}
+#button_edit{
+    -fx-graphic: url("img/edit.png");
+}

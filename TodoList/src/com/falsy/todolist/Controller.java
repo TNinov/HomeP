@@ -64,8 +64,16 @@ public class Controller {
                 deleteItem(item);
             }
         });
+        MenuItem editMenuItem = new MenuItem("Edit");
+        editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+                editItem(item);
+            }
+        });
+        listContextMenu.getItems().addAll(editMenuItem, deleteMenuItem);
 
-        listContextMenu.getItems().addAll(deleteMenuItem);
         todoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
             @Override
             public void changed(ObservableValue<? extends TodoItem> observable, TodoItem oldValue, TodoItem newValue) {
@@ -179,11 +187,9 @@ public class Controller {
     }
 
     @FXML
-    public void handleClickListView(){
+    public void handleDeleteItem(){
         TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-        itemDetailsTextArea.setText(item.getDetails());
-        deadlineLabel.setText(item.getDeadline().toString());
-
+        deleteItem(item);
     }
 
     public void deleteItem(TodoItem item){
@@ -196,6 +202,10 @@ public class Controller {
         if (result.isPresent() && (result.get() == ButtonType.OK)){
             TodoData.getInstance().deleteTodoItem(item);
         }
+    }
+
+    public void editItem(TodoItem item){
+
     }
 
     @FXML

@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jlfgr-1_0.jar!/" />
+          <root url="file://$MODULE_DIR$/img" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

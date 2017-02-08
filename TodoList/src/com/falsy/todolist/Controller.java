@@ -54,12 +54,7 @@ public class Controller {
 
     private Predicate<TodoItem> wantTodayItems;
 
-    //private TodoData data;
-
     public void initialize(){
-        //data = new TodoData();
-        //data.loadTodoItems();
-        //todoListView.setItems(data.getTodoItems());
 
         listContextMenu = new ContextMenu();
         MenuItem deleteMenuItem = new MenuItem("Delete");
@@ -132,14 +127,18 @@ public class Controller {
                             setText(item.getShortDescription());
                             if (item.getDeadline().isBefore(LocalDate.now())){
                                 setTextFill(Color.PURPLE);
+                                setFont(Font.font ("Arial", FontWeight.BOLD, 13));
                             }
                             else if (item.getDeadline().equals(LocalDate.now())){
                                 setTextFill(Color.RED);
-                                setFont(Font.font ("Time New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
+                                setFont(Font.font ("Arial", FontWeight.BOLD, FontPosture.ITALIC, 20));
                             }
                             else if (item.getDeadline().equals(LocalDate.now().plusDays(1))){
                                 setTextFill(Color.GREEN);
-                                setFont(Font.font ("Time New Roman", FontWeight.BOLD, FontPosture.ITALIC, 14));
+                                setFont(Font.font ("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
+                            }
+                            else {
+                                setFont(Font.font ("Arial", FontWeight.BOLD, 13));
                             }
                         }
                     }
@@ -183,6 +182,7 @@ public class Controller {
             DialogController controller = fxmlLoader.getController();
             TodoItem newItem = controller.processResults();
             todoListView.getSelectionModel().select(newItem);
+            todoListView.refresh();
         }
     }
     @FXML
@@ -220,7 +220,7 @@ public class Controller {
         Optional<ButtonType> result = dialog.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) {
             dialogController.updateTodoItem(selectedItem);
-            //data.saveContacts();
+            todoListView.refresh();
         }
     }
 
@@ -249,6 +249,7 @@ public class Controller {
 
         if (result.isPresent() && (result.get() == ButtonType.OK)){
             TodoData.getInstance().deleteTodoItem(item);
+            todoListView.refresh();
         }
     }
 

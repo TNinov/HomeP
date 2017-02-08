@@ -54,12 +54,12 @@
             <HBox>
                 <Label text="Due: " id="label_date">
                     <font>
-                        <Font name="Time New Roman bold" size="20"/>
+                        <Font name="Arial Bold" size="20"/>
                     </font>
                 </Label>
                 <Label fx:id="deadlineLabel">
                     <font>
-                        <Font name="Time New Roman bold" size="20"/>
+                        <Font name="Arial Bold Italic" size="20"/>
                     </font>
                 </Label>
             </HBox>

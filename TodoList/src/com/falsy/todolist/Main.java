@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("mainwindow.fxml"));
         primaryStage.setTitle("Todo List");
+        primaryStage.getIcons().add(new Image("file:src/com/falsy/todolist/img/icon.png"));
         primaryStage.setScene(new Scene(root, 900, 500));
         primaryStage.setResizable(false);
         primaryStage.show();

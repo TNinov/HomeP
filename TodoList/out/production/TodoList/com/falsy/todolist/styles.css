@@ -5,9 +5,7 @@
 .VBox{
     -fx-background-color: white;
 }
-#label_date{
-    -fx-background-color: white;
-}
+
 #button_new{
     -fx-graphic: url("img/new.png");
 }
@@ -19,4 +17,11 @@
 }
 #button_edit{
     -fx-graphic: url("img/edit.png");
+}
+#date_hBox{
+    -fx-background-color: white;
+    -fx-spacing: 10px;
+}
+#label_version{
+    -fx-label-padding: 5px;
 }

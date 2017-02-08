@@ -1,3 +1,4 @@
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
@@ -49,9 +50,9 @@
         </ListView>
     </left>
     <center>
-        <VBox >
+        <VBox>
             <TextArea fx:id="itemDetailsTextArea" VBox.vgrow="ALWAYS" wrapText="true"/>
-            <HBox>
+            <HBox id="date_hBox">
                 <Label text="Due: " id="label_date">
                     <font>
                         <Font name="Arial Bold" size="20"/>
@@ -62,7 +63,15 @@
                         <Font name="Arial Bold Italic" size="20"/>
                     </font>
                 </Label>
+                <Label text="v0.1" id="label_version">
+                    <font>
+                        <Font name="Arial Italic" size="10"/>
+                    </font>
+                </Label>
             </HBox>
         </VBox>
     </center>
+    <bottom>
+
+    </bottom>
 </BorderPane>

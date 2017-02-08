@@ -29,4 +29,15 @@ public class DialogController {
         return newItem;
     }
 
+    public void editTodoItem(TodoItem item){
+        shortDescriptionField.setText(item.getShortDescription());
+        detailsArea.setText(item.getDetails());
+        deadlinePicker.setValue(item.getDeadline());
+    }
+
+    public void updateTodoItem(TodoItem item){
+        item.setShortDescription(shortDescriptionField.getText().trim());
+        item.setDetails(detailsArea.getText().trim());
+        item.setDeadline(deadlinePicker.getValue());
+    }
 }

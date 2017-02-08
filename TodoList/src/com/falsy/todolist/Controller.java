@@ -15,20 +15,20 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.util.Callback;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 public class Controller {
-
-    private List<TodoItem> todoItems;
 
     @FXML
     private ListView<TodoItem> todoListView;
@@ -51,9 +51,15 @@ public class Controller {
     private FilteredList<TodoItem> filteredList;
 
     private Predicate<TodoItem> wantAllItems;
-    private Predicate<TodoItem> wantTodatsitems;
+
+    private Predicate<TodoItem> wantTodayItems;
+
+    //private TodoData data;
 
     public void initialize(){
+        //data = new TodoData();
+        //data.loadTodoItems();
+        //todoListView.setItems(data.getTodoItems());
 
         listContextMenu = new ContextMenu();
         MenuItem deleteMenuItem = new MenuItem("Delete");
@@ -64,12 +70,11 @@ public class Controller {
                 deleteItem(item);
             }
         });
-        MenuItem editMenuItem = new MenuItem("Edit");
+        MenuItem editMenuItem = new MenuItem("Edit..");
         editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-                editItem(item);
+                showEditItemDialog();
             }
         });
         listContextMenu.getItems().addAll(editMenuItem, deleteMenuItem);
@@ -92,7 +97,7 @@ public class Controller {
             }
         };
 
-        wantTodatsitems = new Predicate<TodoItem>() {
+        wantTodayItems = new Predicate<TodoItem>() {
             @Override
             public boolean test(TodoItem todoItem) {
                 return (todoItem.getDeadline().equals(LocalDate.now()));
@@ -125,11 +130,16 @@ public class Controller {
                         }
                         else {
                             setText(item.getShortDescription());
-                            if (item.getDeadline().isBefore(LocalDate.now().plusDays(1))){
+                            if (item.getDeadline().isBefore(LocalDate.now())){
+                                setTextFill(Color.PURPLE);
+                            }
+                            else if (item.getDeadline().equals(LocalDate.now())){
                                 setTextFill(Color.RED);
+                                setFont(Font.font ("Time New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
                             }
                             else if (item.getDeadline().equals(LocalDate.now().plusDays(1))){
-                                setTextFill(Color.BROWN);
+                                setTextFill(Color.GREEN);
+                                setFont(Font.font ("Time New Roman", FontWeight.BOLD, FontPosture.ITALIC, 14));
                             }
                         }
                     }
@@ -160,7 +170,7 @@ public class Controller {
             dialog.getDialogPane().setContent(fxmlLoader.load());
         }
         catch (IOException e){
-            System.out.println("Couldn't load the dialog");
+            System.out.println("Couldn't load the dialog.");
             e.printStackTrace();
             return;
         }
@@ -173,6 +183,44 @@ public class Controller {
             DialogController controller = fxmlLoader.getController();
             TodoItem newItem = controller.processResults();
             todoListView.getSelectionModel().select(newItem);
+        }
+    }
+    @FXML
+    public void showEditItemDialog(){
+        TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
+        if (selectedItem == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Item Selected.");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the item you want to edit.");
+            alert.showAndWait();
+            return;
+        }
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        dialog.setTitle("Edit Todo Item");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("todoItemDialog.fxml"));
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        }
+        catch (IOException e){
+            System.out.println("Couldn't load the dialog");
+            e.printStackTrace();
+            return;
+        }
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        DialogController dialogController = fxmlLoader.getController();
+        dialogController.editTodoItem(selectedItem);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            dialogController.updateTodoItem(selectedItem);
+            //data.saveContacts();
         }
     }
 
@@ -204,15 +252,11 @@ public class Controller {
         }
     }
 
-    public void editItem(TodoItem item){
-
-    }
-
     @FXML
     public void handleFilterButton(){
         TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
         if (filterToggleButton.isSelected()){
-            filteredList.setPredicate(wantTodatsitems);
+            filteredList.setPredicate(wantTodayItems);
             if (filteredList.isEmpty()){
                 itemDetailsTextArea.clear();
                 deadlineLabel.setText("");

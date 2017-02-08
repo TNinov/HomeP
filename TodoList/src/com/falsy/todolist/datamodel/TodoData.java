@@ -25,7 +25,7 @@ public class TodoData {
         return instance;
     }
 
-    private TodoData(){
+    public TodoData(){
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     }
 
@@ -38,31 +38,39 @@ public class TodoData {
     }
 
     public void loadTodoItems() throws IOException{
-        todoItems = FXCollections.observableArrayList();
-        Path path = Paths.get(filename);
-        BufferedReader br = Files.newBufferedReader(path);
+        //try {
+            todoItems = FXCollections.observableArrayList();
+            Path path = Paths.get(filename);
+            BufferedReader br = Files.newBufferedReader(path);
 
-        String input;
+            String input;
 
-        try {
-            while ((input = br.readLine()) != null){
-                String[] itemPieces = input.split("\t");
+            try {
+                while ((input = br.readLine()) != null){
+                    String[] itemPieces = input.split("\t");
 
-                String shortDescription = itemPieces[0];
-                String details = itemPieces[1];
-                String dateString = itemPieces[2];
+                    String shortDescription = itemPieces[0];
+                    String details = itemPieces[1];
+                    String dateString = itemPieces[2];
 
-                LocalDate date = LocalDate.parse(dateString, formatter);
-                TodoItem todoItem = new TodoItem(shortDescription, details, date);
-                todoItems.add(todoItem);
+                    LocalDate date = LocalDate.parse(dateString, formatter);
+                    TodoItem todoItem = new TodoItem(shortDescription, details, date);
+                    todoItems.add(todoItem);
+                }
+
             }
+            finally {
+                if (br != null){
+                    br.close();
+                }
+        }
 
-        }
-        finally {
-            if (br != null){
-                br.close();
-            }
-        }
+        //}
+        /*catch (IOException e) {
+            System.out.println("err");
+            e.printStackTrace();
+            return;
+        }*/
     }
 
     public void storeTodoItems() throws IOException{
